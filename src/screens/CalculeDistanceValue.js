@@ -256,6 +256,7 @@ class CalculeDistanceValue extends React.Component {
               if (response != null) {
                 let currentCoordinates = { ...this.state.markers };
                 const key = this.state.mode == "driver" ? "init" : "final";
+
                 currentCoordinates[key] = {
                   coordinates: {
                     latitude: response.lat,
@@ -264,6 +265,13 @@ class CalculeDistanceValue extends React.Component {
                   title: "Destino",
                   description: "Lugar de Llegada"
                 };
+
+                if(this.mapView != null && this.state.mode == "driver"){
+                  this.mapView.animateToCoordinate({
+                    latitude: response.lat,
+                    longitude: response.lng,
+                  })
+                }
 
 
                 /**
