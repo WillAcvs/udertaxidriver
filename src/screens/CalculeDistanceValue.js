@@ -17,7 +17,8 @@ import { getCoordinatesForPolyline } from '../services/MapService';
 import { getRateByVehicle } from '../services/VehicleService';
 
 
-
+const LATITUDE_DELTA = 0.009;
+const LONGITUDE_DELTA = 0.009;
 
 class CalculeDistanceValue extends React.Component {
   constructor(props) {
@@ -26,6 +27,8 @@ class CalculeDistanceValue extends React.Component {
       coordinates: {
         latitude: 37.78825,
         longitude: -122.4324,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
       },
       isLoading: true,
       markers: {},
@@ -83,6 +86,8 @@ class CalculeDistanceValue extends React.Component {
           const currentCoordenates = {
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
+            latitudeDelta: LATITUDE_DELTA,
+            longitudeDelta: LONGITUDE_DELTA,
           };
           const marker = {
             "init": {
@@ -207,7 +212,7 @@ class CalculeDistanceValue extends React.Component {
         </View>
 
         {this.renderCalculator()}
-        <View style={{ width: "100%", height: "75%" }}>
+        <View style={{ width: "100%", height: "65%" }}>
           <MapView
             provider={PROVIDER_GOOGLE}
             region={this.state.coordinates}
@@ -266,13 +271,6 @@ class CalculeDistanceValue extends React.Component {
                   description: "Lugar de Llegada"
                 };
 
-                if(this.mapView != null && this.state.mode == "driver"){
-                  this.mapView.animateToCoordinate({
-                    latitude: response.lat,
-                    longitude: response.lng,
-                  })
-                }
-
 
                 /**
                  * Esta es la informacion general del recorrdo,
@@ -295,8 +293,15 @@ class CalculeDistanceValue extends React.Component {
                   serviceData: {
                     distance: serviceData.distance,
                     duration: serviceData.time
+                  },
+                  coordinates: {
+                    longitude: currentCoordinates['init']['coordinates']['longitude'],
+                    latitude: currentCoordinates['init']['coordinates']['latitude'],
+                    latitudeDelta: LATITUDE_DELTA,
+                    longitudeDelta: LONGITUDE_DELTA,
                   }
                 })
+                this.updateMapCoordinates();
               }
             }}
           />
