@@ -10,7 +10,6 @@ import { Divider } from 'react-native-elements';
 import { TextInput } from 'react-native-gesture-handler';
 import MapView, { Marker, PROVIDER_GOOGLE, Polyline } from 'react-native-maps';
 
-import { NavigationActions } from 'react-navigation';
 import * as Location from 'expo-location';
 import { AppLoading } from 'expo';
 import { SearchPlaceModal } from '../components';
@@ -34,6 +33,7 @@ class CalculeDistanceValue extends React.Component {
       isModalOpen: false,
       serviceData: {},
       vehicleRate: 0,
+      mode: "",
     }
     this.mapView = null;
   }
@@ -197,8 +197,13 @@ class CalculeDistanceValue extends React.Component {
 
         <Divider />
 
-        <View style={this.componentStyle.searchBar} onTouchStart={() => this.setState({ isModalOpen: true })}>
+        <View style={this.componentStyle.searchBar} onTouchStart={() => this.setState({ isModalOpen: true, mode: "rider" })}>
           <TextInput placeholder="¿Donde irá el Usuario?" />
+        </View>
+
+        
+        <View style={this.componentStyle.searchBar} onTouchStart={() => this.setState({ isModalOpen: true, mode: "driver" })}>
+          <TextInput placeholder="Cambiar Ubicación de Partida" />
         </View>
 
         {this.renderCalculator()}
@@ -244,12 +249,14 @@ class CalculeDistanceValue extends React.Component {
           onDismiss={() => this.setState({ isModalOpen: false })}
         >
           <SearchPlaceModal
+          mode={this.state.mode}
             closeModal={async (response) => {
               this.setState({ isModalOpen: false });
 
               if (response != null) {
                 let currentCoordinates = { ...this.state.markers };
-                currentCoordinates['final'] = {
+                const key = this.state.mode == "driver" ? "init" : "final";
+                currentCoordinates[key] = {
                   coordinates: {
                     latitude: response.lat,
                     longitude: response.lng,

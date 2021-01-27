@@ -147,8 +147,6 @@ export default class DriverTripAccept extends React.Component {
             var curuid = state?.uid;
             this.setState({ curuid })
 
-            console.log(curuid);
-
             let ref = firebase.database().ref('users/' + curuid);
 
             ref.on('value', (snapshot) => {

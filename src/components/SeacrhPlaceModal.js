@@ -131,7 +131,7 @@ class SearchPlaceModal extends React.Component {
                 />
 
                 <View style={this.styles.searchBar}>
-                    <TextInput placeholder="¿Donde irá el Usuario?" onChangeText={text => this.setState({ textField: text })} />
+                    <TextInput placeholder={this.props.mode == "driver" ? "Ubicacion de Partida" : "¿Donde irá el Usuario?"} onChangeText={text => this.setState({ textField: text })} />
                 </View>
                 <Button title="Buscar" onPress={() => this.handlePress()} />
 
