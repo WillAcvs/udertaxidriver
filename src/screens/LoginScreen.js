@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { 
     StyleSheet,
     View,
-    AsyncStorage,                   
     Image,
-    Alert
   } from 'react-native';
 import { LoginComponent, Background, ForgotPassModal, Button } from '../components';
 import * as firebase from 'firebase'
@@ -59,18 +57,17 @@ export default class LoginScreen extends Component {
 
     //on press login after all validation
     async onPressLogin(email, password){
-      this.setState({loading: true},()=>{
+      this.setState({loading: true});
 
-        firebase.auth().signInWithEmailAndPassword(email,password)
-        .then( res => {
-          console.log(res);
-          this.setState({loading: false}); 
-        }).catch(res=>{
-          alert(res.message);
-          this.setState({loading: false}); 
-        })
+      firebase.auth().signInWithEmailAndPassword(email,password)
+      .then( res => {
+        this.setState({loading: false, email, password}); 
+        this.props.navigation.navigate("DriverTripAccept");
+      }).catch(res=>{
+        alert(res.message);
+        this.setState({loading: false}); 
+      });
 
-      })
     }
 
     
@@ -84,7 +81,7 @@ export default class LoginScreen extends Component {
             <View style={styles.logInCompStyl}/>
             <View style={styles.containerView}>
               <LoginComponent
-                complexity={'complex'}
+                complexity='any'
                 loading={this.state.loading}
                 onPressRegister={()=>{this.onPressRegister()}} 
                 onPressLogin={(email, password)=>this.onPressLogin(email, password)} 

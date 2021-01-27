@@ -14,6 +14,7 @@ import EditProfilePage from './EditProfile';
 import AboutPage from './AboutScreen';
 import DriverIncomePage from './DriverIncomeScreen';
 import OnlineChat from './OnlineChat'
+import CalculeDistanceValue from './CalculeDistanceValue';
 
 export {
     TaskListIgnorePopup,
@@ -31,5 +32,6 @@ export {
     EditProfilePage,
     AboutPage,
     DriverIncomePage,
-    OnlineChat
+    OnlineChat,
+    CalculeDistanceValue,
 };

@@ -15,11 +15,12 @@ import {
     EditProfilePage,
     AboutPage,
     OnlineChat,
-    DriverIncomePage
+    DriverIncomePage,
+    CalculeDistanceValue
 } from '../screens';
 import SideMenu from '../components/SideMenu';
 import  { Dimensions } from 'react-native';
-var { width, height } = Dimensions.get('window');
+var { width } = Dimensions.get('window');
 
 //app stack for user end
     export const AppStack = {
@@ -83,10 +84,7 @@ var { width, height } = Dimensions.get('window');
             }
         },
         Chat:{
-            screen:OnlineChat,
-            // navigationOptions:{
-            //     header: null
-            // }
+            screen: OnlineChat,
         },
         DriverTripComplete: {
             screen:  DriverCompleteTrip,
@@ -106,6 +104,12 @@ var { width, height } = Dimensions.get('window');
                 header: null
             }
         },
+        CalculeDistanceValue: {
+            screen: CalculeDistanceValue,
+            navigationOptions:{
+                header: null
+            }
+        }
     }
 
     //authentication stack for user before login
@@ -152,6 +156,10 @@ var { width, height } = Dimensions.get('window');
             name: 'MyEarning',
             screen: createStackNavigator(AppStack, { initialRouteName: 'MyEarning', headerMode: 'none' })
         },
+        'CalculeDistanceValue': {
+            name: 'CalculeDistanceValue',
+            screen: createStackNavigator(AppStack, { initialRouteName: 'CalculeDistanceValue', headerMode: 'none' })
+        }
     };
 
 

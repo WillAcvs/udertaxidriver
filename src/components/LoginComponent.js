@@ -66,7 +66,6 @@ export default class LoginComponent extends Component {
         const passwordValid = this.validatePassword();
         
        if ( emailValid && passwordValid ) {
-           //login function of smart component
             onPressLogin(this.state.email, this.state.password);
             this.setState({email: '', password: ''})
         }

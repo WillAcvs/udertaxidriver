@@ -7,25 +7,41 @@ export default class MapComponent extends Component {
         super(props);
         this.state = {};
     }
-        
+
     render() {
-    const { mapRegion, markerCord, mapStyle } = this.props;
+        const { mapRegion, markerCord, mapStyle } = this.props;
         return (
             <MapView
                 provider={PROVIDER_GOOGLE}
                 showsUserLocation={true}
                 showsMyLocationButton={true}
-                style={[mapStyle,{ marginBottom: this.state.marginBottom }]}
+                style={[mapStyle, { marginBottom: this.state.marginBottom }]}
                 region={mapRegion}
+                minZoomLevel={12.3}
+                maxZoomLevel={18}
                 onMapReady={() => this.setState({ marginBottom: 1 })}
             >
                 <Marker
                     coordinate={markerCord}
-                    title={'marker_title'}
-                    description={'marker_description'}
+                    title={'DEJAR'}
+                    description={'Deja al usuario aquí'}
+                    ref={ref => ref?.showCallout()}
                     image={require('../../assets/images/rsz_2red_pin.png')}
                 >
                 </Marker>
+
+                {
+                    this.props.add && (
+                        <Marker
+                            coordinate={this.props.add}
+                            title={'RECOGER'}
+                            description={'Aqui debes buscar al usuario'}
+                            ref={ref => ref?.showCallout()}
+                            image={require('../../assets/images/rsz_2red_pin.png')}
+                        >
+                        </Marker>
+                    )
+                }
             </MapView>
         );
     }
