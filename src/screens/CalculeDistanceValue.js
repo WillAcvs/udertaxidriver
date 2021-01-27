@@ -207,7 +207,7 @@ class CalculeDistanceValue extends React.Component {
         <View style={this.componentStyle.searchBar} onTouchStart={() => this.setState({ isModalOpen: true, mode: "rider" })}>
           <TextInput placeholder={this.state.userText} placeholderTextColor="black"/>
         </View>
-
+        
         
         <View style={this.componentStyle.searchBar} onTouchStart={() => this.setState({ isModalOpen: true, mode: "driver" })}>
           <TextInput placeholder={this.state.localText} placeholderTextColor="black"/>

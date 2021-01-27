@@ -6,7 +6,6 @@ import {
     Image,
     Dimensions,
     TouchableWithoutFeedback,
-    StatusBar,
     Linking,
     TouchableOpacity
 } from 'react-native';
@@ -38,7 +37,6 @@ export default class DriverStartTrip extends React.Component {
 
     componentWillMount() {
         const allDetails = this.props.navigation.getParam('allDetails')
-        console.log(allDetails);
         this.setState({
             rideDetails: allDetails,
             region: {
@@ -58,7 +56,6 @@ export default class DriverStartTrip extends React.Component {
         let tripRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/my_bookings/' + this.state.rideDetails.bookingId + '/');
         tripRef.on('value', (snap) => {
             let tripData = snap.val();
-            console.log('tripData', tripData)
             if (tripData) {
                 this.setState({ status: tripData.status })
                 if (tripData.status == "CANCELLED") {
@@ -85,6 +82,7 @@ export default class DriverStartTrip extends React.Component {
             }
 
             let location = await Location.getCurrentPositionAsync({});
+
             var latlng = location.coords.latitude + ',' + location.coords.longitude;
             return fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latlng + '&key=' + google_map_key)
                 .then((response) => response.json())
@@ -104,19 +102,17 @@ export default class DriverStartTrip extends React.Component {
 
     //start trip button press function
     onPressStartTrip(item) {
-        console.log(item);
         this.setState({ allData: item })
         this.setState({ mediaSelectModal: true })
 
     }
+
     closeModal() {
         this.setState({ mediaSelectModal: false })
     }
 
     //navigate to chat page
     chat() {
-        // console.log("chat here");
-        // console.log(this.state.tripInfo);
         this.props.navigation.navigate("Chat", { passData: this.state.rideDetails });
     }
 
@@ -142,8 +138,6 @@ export default class DriverStartTrip extends React.Component {
     }
     //Promo code enter function
     codeEnter(inputCode) {
-        console.log(this.state.allData.otp);
-        console.log(inputCode);
         if (inputCode == "" || inputCode == undefined || inputCode == null) {
             alert("Please enter OTP");
         } else {
@@ -216,7 +210,11 @@ export default class DriverStartTrip extends React.Component {
                 </View>
 
                 <View style={styles.segment2}>
-                    <MapComponent mapStyle={styles.map} mapRegion={this.state.region} markerCord={this.state.region} add={{ latitude: this.state.rideDetails.pickup.add.lat, longitude: this.state.rideDetails.pickup.add.longitude}}/>
+                    {
+                        this.state.region && (
+                            <MapComponent mapStyle={styles.map} mapRegion={this.state.region} markerCord={this.state.region} add={{ latitude: this.state.rideDetails.pickup.add.lat, longitude: this.state.rideDetails.pickup.add.longitude }} />
+                        )
+                    }
                     <TouchableOpacity
                         style={styles.floatButtonStyle}
                         onPress={() => this.chat()}
@@ -224,7 +222,6 @@ export default class DriverStartTrip extends React.Component {
                         <Icon
                             name="ios-chatbubbles"
                             type="ionicon"
-                            // icon: 'chat', color: '#fff',
                             size={30}
                             color={colors.WHITE}
                         />
@@ -259,9 +256,7 @@ export default class DriverStartTrip extends React.Component {
                     <View style={styles.fixContenStyle}>
                         <Button
                             title={languageJSON.start_trip}
-                            onPress={() => {
-                                this.onPressStartTrip(this.state.rideDetails)
-                            }}
+                            onPress={() => this.onPressStartTrip(this.state.rideDetails) }
                             titleStyle={{ fontFamily: 'Roboto-Bold' }}
                             buttonStyle={styles.myButtonStyle}
                         />

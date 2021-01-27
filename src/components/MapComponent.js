@@ -13,8 +13,8 @@ export default class MapComponent extends Component {
         return (
             <MapView
                 provider={PROVIDER_GOOGLE}
-                showsUserLocation={true}
-                showsMyLocationButton={true}
+                showsUserLocation
+                showsMyLocationButton
                 style={[mapStyle, { marginBottom: this.state.marginBottom }]}
                 region={mapRegion}
                 minZoomLevel={12.3}
@@ -31,7 +31,7 @@ export default class MapComponent extends Component {
                 </Marker>
 
                 {
-                    this.props.add && (
+                    this.props?.add?.latitude && (
                         <Marker
                             coordinate={this.props.add}
                             title={'RECOGER'}
