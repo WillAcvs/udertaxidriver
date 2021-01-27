@@ -80,7 +80,6 @@ class SearchPlaceModal extends React.Component {
                         const element = item.item;
                         return (
                             <View style={{ flexDirection: "row" }} onTouchStart={() => {
-
                                 getLatLngByPlaceId(element.place_id).then(response => {
                                     Alert.alert("Correcto", "Direccion Cargada", [
                                         {

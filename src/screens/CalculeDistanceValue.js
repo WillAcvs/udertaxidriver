@@ -37,6 +37,8 @@ class CalculeDistanceValue extends React.Component {
       serviceData: {},
       vehicleRate: 0,
       mode: "",
+      localText: "Cambiar Ubicacion de Partida",
+      userText: "¿A donde irá el Usuario?"
     }
     this.mapView = null;
   }
@@ -98,7 +100,7 @@ class CalculeDistanceValue extends React.Component {
           }
           this.setState({
             coordinates: currentCoordenates,
-            markers: marker
+            markers: marker,
           });
 
           this.updateMapCoordinates();
@@ -203,12 +205,12 @@ class CalculeDistanceValue extends React.Component {
         <Divider />
 
         <View style={this.componentStyle.searchBar} onTouchStart={() => this.setState({ isModalOpen: true, mode: "rider" })}>
-          <TextInput placeholder="¿Donde irá el Usuario?" />
+          <TextInput placeholder={this.state.userText} placeholderTextColor="black"/>
         </View>
 
         
         <View style={this.componentStyle.searchBar} onTouchStart={() => this.setState({ isModalOpen: true, mode: "driver" })}>
-          <TextInput placeholder="Cambiar Ubicación de Partida" />
+          <TextInput placeholder={this.state.localText} placeholderTextColor="black"/>
         </View>
 
         {this.renderCalculator()}
@@ -257,19 +259,26 @@ class CalculeDistanceValue extends React.Component {
           mode={this.state.mode}
             closeModal={async (response) => {
               this.setState({ isModalOpen: false });
+              const isDriver = this.state.mode == "driver";
+              console.log("-------------------------->");
 
-              if (response != null) {
+
+              if (!!response) {
                 let currentCoordinates = { ...this.state.markers };
-                const key = this.state.mode == "driver" ? "init" : "final";
+                
+                const key = isDriver ? "init" : "final";
 
                 currentCoordinates[key] = {
                   coordinates: {
-                    latitude: response.lat,
-                    longitude: response.lng,
+                    latitude: response.position.lat,
+                    longitude: response.position.lng,
+                    latitudeDelta: LATITUDE_DELTA,
+                    longitudeDelta: LONGITUDE_DELTA
                   },
                   title: "Destino",
                   description: "Lugar de Llegada"
                 };
+
 
 
                 /**
@@ -287,6 +296,7 @@ class CalculeDistanceValue extends React.Component {
                   currentCoordinates['final']['coordinates']
                 );
 
+
                 this.setState({
                   markers: currentCoordinates,
                   polylines: serviceData.coordenates,
@@ -299,8 +309,12 @@ class CalculeDistanceValue extends React.Component {
                     latitude: currentCoordinates['init']['coordinates']['latitude'],
                     latitudeDelta: LATITUDE_DELTA,
                     longitudeDelta: LONGITUDE_DELTA,
-                  }
+                  },
+                  [isDriver ? "localText" : "userText"]: (isDriver ? "Inicia en: " : "Dejar en: ") + response.name,
                 })
+                console.log(response);
+
+                
                 this.updateMapCoordinates();
               }
             }}

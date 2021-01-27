@@ -10,7 +10,7 @@ const getRateByVehicle = async ( callBack )=> {
 
         result.on("value", (response)=> {
             callBack(
-                response.val()[0] || null
+                !!response.val() ? response.val()[0] : null
             );
         })
     });

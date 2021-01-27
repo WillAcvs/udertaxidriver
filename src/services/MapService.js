@@ -3,7 +3,10 @@ const { google_map_key } = require("../common/key");
 const getLatLngByPlaceId = async (placeId) => {
     const route = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&key=${google_map_key}`;
     const response = (await (await fetch(route)).json());
-    return response['result']['geometry']['location'] || null;
+    return {
+        position: response['result']['geometry']['location'] || null,
+        name: response['result']['name'] || ""
+    };
 }
 
 const getCoordinatesForPolyline = async (originObject, destinationObject) => {
@@ -16,7 +19,7 @@ const getCoordinatesForPolyline = async (originObject, destinationObject) => {
     return {
         "coordenates": calculeCoordinates(routes.overview_polyline.points), /** @Array */
         "distance": routes.legs[0].distance['value'], /** @Number */
-        "time":  (routes.legs[0].duration['value']/60).toFixed(1) /** @Number */
+        "time":  (routes.legs[0].duration['value']/60).toFixed(1) /** @Number */,
     };
 }
 
