@@ -34,7 +34,7 @@ export default class TaskListIgnorePopup extends React.Component{
                                 <TouchableHighlight
                                     style={[styles.btnStyle, styles.clickStyle]}
                                     onPress={() => {
-                                    this.setModalVisible(!this.state.modalVisible)
+                                        this.setModalVisible(!this.state.modalVisible)
                                     }}>
                                     <Text style={styles.cancelStyle}>{languageJSON.cancel}</Text>
                                 </TouchableHighlight>

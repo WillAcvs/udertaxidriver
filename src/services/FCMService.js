@@ -17,6 +17,7 @@ class FCMService {
                     errorType: "FCMToken Error",
                     userId: id,
                     causedAt: new Date().toISOString(),
+                    error: e,
                 })
             }
         })
