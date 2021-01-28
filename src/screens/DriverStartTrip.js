@@ -163,7 +163,7 @@ export default class DriverStartTrip extends React.Component {
                                 this.closeModal();
                                 this.props.navigation.navigate('DriverTripComplete', { allDetails: this.state.allData, starttime: new Date().getTime() })
                                 this.sendPushNotification(this.state.allData.customer, this.state.allData.bookingId);
-                            })
+                            });
                         })
                     })
 

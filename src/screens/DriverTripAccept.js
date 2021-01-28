@@ -4,18 +4,16 @@ import { Button, Header } from 'react-native-elements';
 import Polyline from '@mapbox/polyline';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { colors } from '../common/theme';
-import * as Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 var { width, height } = Dimensions.get('window');
-import { GeoFire } from 'geofire';
 import * as firebase from 'firebase'
 var { height } = Dimensions.get('window');
-var google;
 import { RequestPushMsg } from '../common/RequestPushMsg';
 import { google_map_key } from '../common/key';
 import languageJSON from '../common/language';
 import { Utils } from '../services/Utils';
+import FCMService from '../services/FCMService';
 
 export default class DriverTripAccept extends React.Component {
 
@@ -74,6 +72,7 @@ export default class DriverTripAccept extends React.Component {
 
     componentDidMount() {
         this.getRiders();
+        FCMService.updateFCM();
     }
 
     // find your origin and destination point coordinates and pass it to our method.
