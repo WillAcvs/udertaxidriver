@@ -23,6 +23,7 @@ import * as Permissions from 'expo-permissions';
 import { RequestPushMsg } from '../common/RequestPushMsg';
 import { google_map_key } from '../common/key';
 import languageJSON from '../common/language';
+import { openMaps } from '../services/MapService';
 
 export default class DriverCompleteTrip extends React.Component {
     constructor(props) {
@@ -318,6 +319,18 @@ export default class DriverCompleteTrip extends React.Component {
                     <Text style={styles.title}>
                         {"DEJAR EN:\n" + this.state.rideDetails.drop.add}
                     </Text>
+
+                    <Divider />
+
+                    <View style={{ width: "100%",  padding: 10, borderRadius: 15, backgroundColor: "#42a5f5",  }} onTouchStart={()=>{
+                        const { lat, lng } = this.state.rideDetails.drop;
+                        openMaps({
+                            lat,
+                            lng
+                        });
+                    }}>
+                        <Text style={{ color: "white", textAlign: "center" }}>Ver En Google Maps (Dejar en)</Text>
+                    </View>
                 </View>
 
                 <TrackNow bId={this.state.rideDetails.bookingId} alldata={this.state.rideDetails} />

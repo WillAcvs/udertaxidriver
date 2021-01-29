@@ -216,7 +216,6 @@ export default class DriverTripAccept extends React.Component {
         driver_name: this.state.driverDetails.firstName + ' ' + this.state.driverDetails.lastName,
         driver_contact: this.state.driverDetails.mobile,
         vehicle_number: this.state.driverDetails.vehicleNumber,
-        // vehicleModelName: this.state.driverDetails.vehicleModel,
         driverRating: this.state.driverDetails.ratings ? this.state.driverDetails.ratings.userrating : "0",
         drop: item.drop,
         otp: item.otp,
