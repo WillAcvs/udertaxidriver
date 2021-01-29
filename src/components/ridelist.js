@@ -19,6 +19,7 @@ export default class RideList extends React.Component {
 
     //flatlist return function
     newData = ({ item, index }) => {
+        console.log(item);
         return (
             <TouchableOpacity style={styles.iconClickStyle} onPress={() => this.onPressButton(item, index)}>
                 <View style={styles.iconViewStyle}>
@@ -35,7 +36,7 @@ export default class RideList extends React.Component {
                         <Text style={[styles.textStyle, styles.dateStyle]}>{new Date(item.tripdate).toLocaleString()}</Text>
                         <View style={[styles.picupStyle, styles.position]}>
                             <View style={styles.greenDot} />
-                            <Text style={[styles.picPlaceStyle, styles.placeStyle]}>{item.pickup.add ? item.pickup.add : ""}</Text>
+                            <Text style={[styles.picPlaceStyle, styles.placeStyle]}>{item.pickup.add || ""}</Text>
                         </View>
                         <View style={[styles.dropStyle, styles.textViewStyle]}>
                             <View style={[styles.redDot, styles.textPosition]} />

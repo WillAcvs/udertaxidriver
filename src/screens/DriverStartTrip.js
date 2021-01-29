@@ -104,7 +104,6 @@ export default class DriverStartTrip extends React.Component {
     onPressStartTrip(item) {
         this.setState({ allData: item })
         this.setState({ mediaSelectModal: true })
-
     }
 
     closeModal() {

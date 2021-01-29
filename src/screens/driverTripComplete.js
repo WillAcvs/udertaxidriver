@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet,
+import {
+    StyleSheet,
     View,
     Text,
     FlatList,
@@ -7,21 +8,21 @@ import { StyleSheet,
     TouchableWithoutFeedback,
     Platform
 } from 'react-native';
-import {Divider,Button, Header} from 'react-native-elements';
+import { Divider, Button, Header } from 'react-native-elements';
 import StarRating from 'react-native-star-rating';
 import { colors } from '../common/theme';
-import  languageJSON  from '../common/language';
-import  {GeoFire} from 'geofire';
+import languageJSON from '../common/language';
+import { GeoFire } from 'geofire';
 import * as firebase from 'firebase'
 import { RequestPushMsg } from '../common/RequestPushMsg';
 import { Currency } from '../common/CurrencySymbol';
 export default class DriverTripComplete extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             starCount: 3.5,
             title: 'John Dasgupta',
-            
+
         }
 
 
@@ -43,66 +44,66 @@ export default class DriverTripComplete extends React.Component {
             trip_cost: trip_cost,
             trip_end_time: trip_end_time
         })
-        
+
     }
 
     //done button press function
     onPressDone(item) {
         var data = {
-            payment_status:"WAITING",
+            payment_status: "WAITING",
         };
 
         var riderData = {
-            payment_status:"WAITING",
+            payment_status: "WAITING",
         };
         //var bookingId = item.bookingId?item.bookingId:item.bookingUid;
         let dbRef = firebase.database().ref('users/' + this.state.curUid + '/my_bookings/' + item.bookingId + '/');
-        dbRef.update(data).then(()=>{
-            firebase.database().ref('bookings/' + item.bookingId + '/').update(data).then(()=>{
+        dbRef.update(data).then(() => {
+            firebase.database().ref('bookings/' + item.bookingId + '/').update(data).then(() => {
                 let userDbRef = firebase.database().ref('users/' + item.customer + '/my-booking/' + item.bookingId + '/')
-                    userDbRef.update(riderData).then(()=>{
-                        firebase.database().ref('users/' + this.state.curUid+'/').update({
-                            queue:false
-                        }).then(()=>{
-                            this.props.navigation.navigate('DriverTripAccept')
-                            this.sendPushNotification(item.customer,item.bookingId);
-                        }) 
-                        
+                userDbRef.update(riderData).then(() => {
+                    firebase.database().ref('users/' + this.state.curUid + '/').update({
+                        queue: false
+                    }).then(() => {
+                        this.props.navigation.navigate('DriverTripAccept')
+                        this.sendPushNotification(item.customer, item.bookingId);
                     })
+
                 })
-                })
+            })
+        })
     }
 
     //rating
     onStarRatingPress(rating) {
         this.setState({
-          starCount: rating
+            starCount: rating
         });
     }
-      
 
-    sendPushNotification(customerUID,bookingId){
-        const customerRoot=firebase.database().ref('users/'+customerUID);
-        customerRoot.once('value',customerData=>{
-            if(customerData.val()){
+
+    sendPushNotification(customerUID, bookingId) {
+        const customerRoot = firebase.database().ref('users/' + customerUID);
+        customerRoot.once('value', customerData => {
+            if (customerData.val()) {
                 let allData = customerData.val()
-                RequestPushMsg(allData.pushToken?allData.pushToken:null, languageJSON.driver_requested_for_payment + bookingId)
+                RequestPushMsg(allData.pushToken ? allData.pushToken : null, languageJSON.driver_requested_for_payment + bookingId)
             }
         })
     }
-   
-    render(){
-        return(
+
+    render() {
+        return (
             <View style={styles.mainViewStyle}>
-                <Header 
+                <Header
                     backgroundColor={colors.GREY.default}
-                    leftComponent={{icon:'md-menu', type:'ionicon', color:colors.WHITE, size: 30, component: TouchableWithoutFeedback,onPress: ()=>{this.props.navigation.toggleDrawer();} }}
+                    leftComponent={{ icon: 'md-menu', type: 'ionicon', color: colors.WHITE, size: 30, component: TouchableWithoutFeedback, onPress: () => { this.props.navigation.toggleDrawer(); } }}
                     centerComponent={<Text style={styles.headerTitleStyle}>{languageJSON.on_trip}</Text>}
                     containerStyle={styles.headerStyle}
                     innerContainerStyles={styles.headerInnerStyle}
                 />
                 <View style={styles.dateViewStyle}>
-                        <Text style={styles.dateViewTextStyle}>{new Date(this.state.rideDetails.tripdate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</Text>
+                    <Text style={styles.dateViewTextStyle}>{new Date(this.state.rideDetails.tripdate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</Text>
                 </View>
 
                 <View style={styles.rateViewStyle}>
@@ -112,24 +113,24 @@ export default class DriverTripComplete extends React.Component {
                 <View style={styles.addressViewStyle}>
                     <FlatList
                         data={[
-                            {key: this.state.rideDetails.pickup.add, type: 'pickup'},
-                            {key: this.state.rideDetails.drop.add, type: 'drop'}
+                            { key: this.state.rideDetails.pickup.add, type: 'pickup' },
+                            { key: this.state.rideDetails.drop.add, type: 'drop' }
                         ]}
-                        renderItem={({item}) => 
+                        renderItem={({ item }) =>
                             <View style={styles.pickUpStyle}>
-                            {item.type == "pickup" ? 
-                                <View style={styles.greenDot}></View>
-                                :<View style={styles.redDot}></View>
-                            }
+                                {item.type == "pickup" ?
+                                    <View style={styles.greenDot}></View>
+                                    : <View style={styles.redDot}></View>
+                                }
                                 <Text style={styles.addressViewTextStyle}>{item.key}</Text>
                             </View>
                         }
                     />
                 </View>
                 <View style={styles.confBtnStyle}>
-                    <Button 
+                    <Button
                         title={languageJSON.request_payment}
-                        titleStyle={{fontFamily: 'Roboto-Bold',}}
+                        titleStyle={{ fontFamily: 'Roboto-Bold', }}
                         onPress={() => {
                             this.onPressDone(this.state.rideDetails);
                         }}
@@ -143,43 +144,43 @@ export default class DriverTripComplete extends React.Component {
 
 //Screen Styling
 const styles = StyleSheet.create({
-    headerStyle: { 
-        backgroundColor: colors.GREY.default, 
-        borderBottomWidth: 0 
+    headerStyle: {
+        backgroundColor: colors.GREY.default,
+        borderBottomWidth: 0
     },
     headerInnerStyle: {
-        marginLeft:10,
+        marginLeft: 10,
         marginRight: 10
     },
-    headerTitleStyle: { 
+    headerTitleStyle: {
         color: colors.WHITE,
-        fontFamily:'Roboto-Bold',
+        fontFamily: 'Roboto-Bold',
         fontSize: 20
     },
-    dateViewStyle: {        
-        justifyContent:"center", 
-        flex:1,
+    dateViewStyle: {
+        justifyContent: "center",
+        flex: 1,
         marginTop: 20
     },
     dateViewTextStyle: {
         fontFamily: 'Roboto-Regular',
-        color: colors.GREY.btnPrimary, 
+        color: colors.GREY.btnPrimary,
         fontSize: 26,
-        textAlign:"center"
+        textAlign: "center"
     },
     rateViewStyle: {
         alignItems: 'center',
-        flex:3
+        flex: 3
     },
     rateViewTextStyle: {
         fontSize: 60,
         color: colors.BLACK,
         fontFamily: 'Roboto-Bold',
         fontWeight: 'bold',
-        textAlign:"center"
+        textAlign: "center"
     },
     addressViewStyle: {
-        flex:4,
+        flex: 4,
         flexDirection: 'row',
         paddingTop: 22,
         paddingLeft: 10,
@@ -189,9 +190,9 @@ const styles = StyleSheet.create({
         color: colors.GREY.secondary,
         fontSize: 19,
         fontFamily: 'Roboto-Regular',
-        marginLeft:15, 
-        marginRight:15,
-        marginTop: 15, 
+        marginLeft: 15,
+        marginRight: 15,
+        marginTop: 15,
         lineHeight: 24
     },
     greenDot: {
@@ -206,50 +207,50 @@ const styles = StyleSheet.create({
         height: 12,
         borderRadius: 50
     },
-    divider:{
-        backgroundColor: colors.BLACK, 
-        width:'20%',
+    divider: {
+        backgroundColor: colors.BLACK,
+        width: '20%',
         height: 1,
-        top:'3.7%'
+        top: '3.7%'
     },
     summaryText: {
         color: colors.GREY.btnPrimary,
         fontSize: 22,
-        textAlign:"center",
+        textAlign: "center",
         fontFamily: 'Roboto-Regular',
     },
-    mainViewStyle:{
-        flex: 1, 
-        backgroundColor: colors.WHITE, 
-        flexDirection: 'column', 
+    mainViewStyle: {
+        flex: 1,
+        backgroundColor: colors.WHITE,
+        flexDirection: 'column',
         //marginTop: StatusBar.currentHeight
     },
-    pickUpStyle:{
-        flexDirection: 'row', 
+    pickUpStyle: {
+        flexDirection: 'row',
         alignItems: 'center'
     },
-    tripMainView:{
-        flex:3,
-        flexDirection:"column", 
-        justifyContent:"center"
+    tripMainView: {
+        flex: 3,
+        flexDirection: "column",
+        justifyContent: "center"
     },
-    ratingViewStyle:{
-        flex:2,
-        flexDirection:"row", 
-        justifyContent:"center"
+    ratingViewStyle: {
+        flex: 2,
+        flexDirection: "row",
+        justifyContent: "center"
     },
-    tripSummaryStyle:{
-        flex:1, 
-        flexDirection:"row", 
-        justifyContent:'center'
+    tripSummaryStyle: {
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: 'center'
     },
-    confBtnStyle:{
-        flex:5, 
-        justifyContent:"flex-end",
-        marginBottom:'5%', 
+    confBtnStyle: {
+        flex: 5,
+        justifyContent: "flex-end",
+        marginBottom: '5%',
         alignItems: 'center'
     },
-    myButtonStyle:{
+    myButtonStyle: {
         backgroundColor: colors.GREY.default,
         width: 300,
         padding: 10,
@@ -257,13 +258,13 @@ const styles = StyleSheet.create({
         borderWidth: 0,
         borderRadius: 10
     },
-    contStyle:{
-        marginTop: 0, 
-        paddingBottom: Platform.OS=='android'?5:0
-    },summaryStyle:{
-        justifyContent:"flex-end" 
+    contStyle: {
+        marginTop: 0,
+        paddingBottom: Platform.OS == 'android' ? 5 : 0
+    }, summaryStyle: {
+        justifyContent: "flex-end"
     },
-    dividerStyle:{
-        justifyContent:"flex-start" 
+    dividerStyle: {
+        justifyContent: "flex-start"
     }
 });

@@ -177,84 +177,90 @@ export default class DriverTripAccept extends React.Component {
 
   // accept button press function
   onPressAccept(item) {
-    var data = {
-      carType: item.carType,
-      customer: item.customer,
-      customer_name: item.customer_name,
-      otp: item.otp,
-      distance: item.distance,
-      driver: this.state.curUid,
-      driver_image: this.state.driverDetails.profile_image ? this.state.driverDetails.profile_image : "",
-      driver_name: this.state.driverDetails.firstName + ' ' + this.state.driverDetails.lastName,
-      driver_contact: this.state.driverDetails.mobile,
-      vehicle_number: this.state.driverDetails.vehicleNumber,
-      // vehicleModelName: this.state.driverDetails.vehicleModel,
-      driverRating: this.state.driverDetails.ratings ? this.state.driverDetails.ratings.userrating : "0",
-      drop: item.drop,
-      pickup: item.pickup,
-      estimate: item.estimate,
-      estimateDistance: item.estimateDistance,
-      serviceType: item.serviceType,
-      status: "ACCEPTED",
-      total_trip_time: item.total_trip_time,
-      trip_cost: item.trip_cost,
-      trip_end_time: item.trip_end_time,
-      trip_start_time: item.trip_start_time,
-      tripdate: item.tripdate,
-    }
+    firebase.auth().onAuthStateChanged(user => {
+      this.setState({
+        curUid: user.uid
+      });
 
-    var riderData = {
-      carType: item.carType,
-      distance: item.distance,
-      driver: this.state.curUid,
-      driver_image: this.state.driverDetails.profile_image ? this.state.driverDetails.profile_image : "",
-      driver_name: this.state.driverDetails.firstName + ' ' + this.state.driverDetails.lastName,
-      driver_contact: this.state.driverDetails.mobile,
-      vehicle_number: this.state.driverDetails.vehicleNumber,
-      // vehicleModelName: this.state.driverDetails.vehicleModel,
-      driverRating: this.state.driverDetails.ratings ? this.state.driverDetails.ratings.userrating : "0",
-      drop: item.drop,
-      otp: item.otp,
-      pickup: item.pickup,
-      estimate: item.estimate,
-      estimateDistance: item.estimateDistance,
-      serviceType: item.serviceType,
-      status: "ACCEPTED",
-      total_trip_time: item.total_trip_time,
-      trip_cost: item.trip_cost,
-      trip_end_time: item.trip_end_time,
-      trip_start_time: item.trip_start_time,
-      tripdate: item.tripdate,
-    }
+      var data = {
+        carType: item.carType,
+        customer: item.customer,
+        customer_name: item.customer_name,
+        otp: item.otp,
+        distance: item.distance,
+        driver: this.state.curUid,
+        driver_image: this.state.driverDetails.profile_image ? this.state.driverDetails.profile_image : "",
+        driver_name: this.state.driverDetails.firstName + ' ' + this.state.driverDetails.lastName,
+        driver_contact: this.state.driverDetails.mobile,
+        vehicle_number: this.state.driverDetails.vehicleNumber,
+        // vehicleModelName: this.state.driverDetails.vehicleModel,
+        driverRating: this.state.driverDetails.ratings ? this.state.driverDetails.ratings.userrating : "0",
+        drop: item.drop,
+        pickup: item.pickup,
+        estimate: item.estimate,
+        estimateDistance: item.estimateDistance,
+        serviceType: item.serviceType,
+        status: "ACCEPTED",
+        total_trip_time: item.total_trip_time,
+        trip_cost: item.trip_cost,
+        trip_end_time: item.trip_end_time,
+        trip_start_time: item.trip_start_time,
+        tripdate: item.tripdate,
+      }
 
-    let dbRef = firebase.database().ref('users/' + this.state.curUid + '/my_bookings/' + item.bookingId + '/');
-    dbRef.update(data).then(() => {
-      firebase.database().ref('bookings/' + item.bookingId + '/').update(data).then(() => {
-        firebase.database().ref('bookings/' + item.bookingId).once('value', (snap) => {
-          let requestedDriverArr = snap.val().requestedDriver;
-          if (requestedDriverArr) {
-            for (let i = 0; i < requestedDriverArr.length; i++) {
-              firebase.database().ref('users/' + requestedDriverArr[i] + '/waiting_riders_list/' + item.bookingId + '/').remove();
+      var riderData = {
+        carType: item.carType,
+        distance: item.distance,
+        driver: this.state.curUid,
+        driver_image: this.state.driverDetails.profile_image ? this.state.driverDetails.profile_image : "",
+        driver_name: this.state.driverDetails.firstName + ' ' + this.state.driverDetails.lastName,
+        driver_contact: this.state.driverDetails.mobile,
+        vehicle_number: this.state.driverDetails.vehicleNumber,
+        // vehicleModelName: this.state.driverDetails.vehicleModel,
+        driverRating: this.state.driverDetails.ratings ? this.state.driverDetails.ratings.userrating : "0",
+        drop: item.drop,
+        otp: item.otp,
+        pickup: item.pickup,
+        estimate: item.estimate,
+        estimateDistance: item.estimateDistance,
+        serviceType: item.serviceType,
+        status: "ACCEPTED",
+        total_trip_time: item.total_trip_time,
+        trip_cost: item.trip_cost,
+        trip_end_time: item.trip_end_time,
+        trip_start_time: item.trip_start_time,
+        tripdate: item.tripdate,
+      }
+
+      let dbRef = firebase.database().ref('users/' + this.state.curUid + '/my_bookings/' + item.bookingId + '/');
+      dbRef.update(data).then(() => {
+        firebase.database().ref('bookings/' + item.bookingId + '/').update(data).then(() => {
+          firebase.database().ref('bookings/' + item.bookingId).once('value', (snap) => {
+            let requestedDriverArr = snap.val().requestedDriver;
+            if (requestedDriverArr) {
+              for (let i = 0; i < requestedDriverArr.length; i++) {
+                firebase.database().ref('users/' + requestedDriverArr[i] + '/waiting_riders_list/' + item.bookingId + '/').remove();
+              }
+              this.props.navigation.navigate('DriverTripStart', { allDetails: item })
             }
-            this.props.navigation.navigate('DriverTripStart', { allDetails: item })
-          }
+          })
         })
+        this.setState({ currentBId: item.bookingId }, () => {
+          this.checking();
+          this.sendPushNotification(item.customer, item.bookingId, riderData.driver_name + languageJSON.accept_booking_request)
+        })
+
+      }).catch((error) => { console.log(error) })
+
+
+      let userDbRef = firebase.database().ref('users/' + item.customer + '/my-booking/' + item.bookingId + '/'); userDbRef.update(riderData);
+      let currentUserdbRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/');
+      currentUserdbRef.update({
+        queue: true
       })
-      this.setState({ currentBId: item.bookingId }, () => {
-        this.checking();
-        this.sendPushNotification(item.customer, item.bookingId, riderData.driver_name + languageJSON.accept_booking_request)
-      })
-
-    }).catch((error) => { console.log(error) })
 
 
-    let userDbRef = firebase.database().ref('users/' + item.customer + '/my-booking/' + item.bookingId + '/'); userDbRef.update(riderData);
-    let currentUserdbRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/');
-    currentUserdbRef.update({
-      queue: true
-    })
-
-
+    });
   }
 
   //ignore button press function
@@ -265,32 +271,32 @@ export default class DriverTripAccept extends React.Component {
    * del booking general y de los drivers
    */
   onPressIgnore(item) {
-    firebase.auth().onAuthStateChanged( user => {
+    firebase.auth().onAuthStateChanged(user => {
       const currentUserId = user.uid;
 
       firebase.database().ref('bookings/' + item.bookingId + '/').once('value', data => {
-  
+
         if (data.val()) {
-  
+
           firebase.database().ref('users/' + currentUserId + '/waiting_riders_list/' + item.bookingId + '/').remove().then(() => {
             this.setModalVisible(false, null)
           });
-  
+
           let mainBookingData = data.val();
-  
+
           if (mainBookingData.requestedDriver) {
             if (mainBookingData.requestedDriver.length == 1) {
               firebase.database().ref('bookings/' + item.bookingId + '/').set({
                 status: "CANCELLED",
                 reason: "Cancelado por el conductor.",
               }).then(() => {
-                  let userDbRef = firebase.database().ref('users/' + item.customer + '/my-booking/' + item.bookingId + '/');
-                  userDbRef.update({
-                    status: "CANCELLED",
+                let userDbRef = firebase.database().ref('users/' + item.customer + '/my-booking/' + item.bookingId + '/');
+                userDbRef.update({
+                  status: "CANCELLED",
                   reason: "Cancelado por el conductor.",
-                  });
-                  this.sendPushNotification(item.customer, item.bookingId, languageJSON.booking_request_rejected)
-                })
+                });
+                this.sendPushNotification(item.customer, item.bookingId, languageJSON.booking_request_rejected)
+              })
             }
             else {
               let arr = mainBookingData.requestedDriver.filter((item) => {
