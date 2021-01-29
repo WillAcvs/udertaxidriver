@@ -19,6 +19,7 @@ import * as firebase from 'firebase';
 import languageJSON from '../common/language';
 var { width, height } = Dimensions.get('window');
 import { google_map_key } from '../common/key';
+import { openMaps } from '../services/MapService';
 export default class DriverStartTrip extends React.Component {
     constructor(props) {
         super(props);
@@ -206,6 +207,16 @@ export default class DriverStartTrip extends React.Component {
                         Buscar En:
                     </Text>
                     <Text style={styles.textContainer}>{this.state.rideDetails.pickup.add}</Text>
+
+                    <View style={{ width: "100%",  padding: 10, borderRadius: 15, backgroundColor: "#42a5f5",  }} onTouchStart={()=>{
+                        const { lat, lng } = this.state.rideDetails.pickup;
+                        openMaps({
+                            lat,
+                            lng
+                        });
+                    }}>
+                        <Text style={{ color: "white", textAlign: "center" }}>Ver En Google Maps (Buscar en)</Text>
+                    </View>
                 </View>
 
                 <View style={styles.segment2}>
@@ -255,7 +266,7 @@ export default class DriverStartTrip extends React.Component {
                     <View style={styles.fixContenStyle}>
                         <Button
                             title={languageJSON.start_trip}
-                            onPress={() => this.onPressStartTrip(this.state.rideDetails) }
+                            onPress={() => this.onPressStartTrip(this.state.rideDetails)}
                             titleStyle={{ fontFamily: 'Roboto-Bold' }}
                             buttonStyle={styles.myButtonStyle}
                         />
@@ -287,11 +298,11 @@ const styles = StyleSheet.create({
     },
     textContainer: {
         textAlign: "center",
-        fontSize: 16,
+        fontSize: 13,
         color: colors.BLUE.dark,
         fontFamily: 'Roboto-Medium',
         lineHeight: 22,
-        marginBottom: 15,
+        marginBottom: 10,
     },
     headerStyle: {
         backgroundColor: colors.GREY.default,
@@ -303,12 +314,11 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
     segment1: {
-        width: '97.4%',
+        width: '98%',
         justifyContent: 'center',
         borderRadius: 10,
         backgroundColor: colors.WHITE,
-        margin: 5,
-        padding: 12,
+        padding: 5,
     },
     segment2: {
         flex: 7.5,
