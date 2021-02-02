@@ -195,7 +195,7 @@ class CalculeDistanceValue extends React.Component {
 
     return (
       <View style={this.componentStyle.route}>
-        <Button title="Regresar" color="#2196F3" onPress={() => {
+        <Button title="Regresar" color="#6633FF" onPress={() => {
           this.props.navigation.goBack(null);          
         }} />
 

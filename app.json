@@ -1,64 +1,64 @@
 {
-  "expo": {
-    "name": "Uder Driver",
-    "description": "Aplicación Taxi Conductor",
-    "slug": "UderDriver",
-    "privacy": "public",
-    "platforms": [
-      "ios",
-      "android"
-    ],
-    "notification": {
-      "icon": "./assets/images/push_notification.png"
-    },
-    "version": "4.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "assets/*"
-    ],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.app.uderdriverapp",
-      "infoPlist": {
-        "NSLocationAlwaysUsageDescription": "This app uses the location to find the Cabs near you.",
-        "NSLocationWhenInUseUsageDescription": "This app uses the location to find the Cabs near you.",
-        "NSCameraUsageDescription": "This app uses the camera to take your profile picture.",
-        "NSPhotoLibraryUsageDescription": "This app uses Photo Library to help upload your profile picture.",
-        "UIBackgroundModes": [
-          "location",
-          "fetch"
-        ]
-      },
-      "config": {
-        "googleMapsApiKey": "AIzaSyB2tjARQd4izKAbLIggavmCZsykqn1M13Q"
-      }
-    },
-    "android": {
-      "package": "com.app.uderdriverapp",
-      "versionCode": 1,
-      "permissions": [
-        "CAMERA",
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE",
-        "LOCATION",
-        "ACCESS_FINE_LOCATION",
-        "ACCESS_COARSE_LOCATION",
-        "CAMERA_ROLL"
-      ],
-      "config": {
-        "googleMaps": {
-          "apiKey": "AIzaSyB2tjARQd4izKAbLIggavmCZsykqn1M13Q"
+    "expo": {
+        "name": "Uder Driver",
+        "description": "Aplicación Taxi Conductor",
+        "slug": "UderDriver",
+        "privacy": "public",
+        "platforms": [
+            "ios",
+            "android"
+        ],
+        "notification": {
+            "icon": "./assets/images/push_notification.png"
+        },
+        "version": "4.1.0",
+        "orientation": "portrait",
+        "icon": "./assets/images/icon.png",
+        "splash": {
+            "image": "./assets/images/splash.png",
+            "resizeMode": "cover",
+            "backgroundColor": "#ffffff"
+        },
+        "updates": {
+            "fallbackToCacheTimeout": 0
+        },
+        "assetBundlePatterns": [
+            "assets/*"
+        ],
+        "ios": {
+            "supportsTablet": true,
+            "bundleIdentifier": "com.app.uderdriverapp",
+            "infoPlist": {
+                "NSLocationAlwaysUsageDescription": "This app uses the location to find the Cabs near you.",
+                "NSLocationWhenInUseUsageDescription": "This app uses the location to find the Cabs near you.",
+                "NSCameraUsageDescription": "This app uses the camera to take your profile picture.",
+                "NSPhotoLibraryUsageDescription": "This app uses Photo Library to help upload your profile picture.",
+                "UIBackgroundModes": [
+                    "location",
+                    "fetch"
+                ]
+            },
+            "config": {
+                "googleMapsApiKey": "AIzaSyB2tjARQd4izKAbLIggavmCZsykqn1M13Q"
+            }
+        },
+        "android": {
+            "package": "com.app.uderdriverapp",
+            "versionCode": 2,
+            "permissions": [
+                "CAMERA",
+                "READ_EXTERNAL_STORAGE",
+                "WRITE_EXTERNAL_STORAGE",
+                "LOCATION",
+                "ACCESS_FINE_LOCATION",
+                "ACCESS_COARSE_LOCATION",
+                "CAMERA_ROLL"
+            ],
+            "config": {
+                "googleMaps": {
+                    "apiKey": "AIzaSyB2tjARQd4izKAbLIggavmCZsykqn1M13Q"
+                }
+            }
         }
-      }
     }
-  }
 }

@@ -313,23 +313,23 @@ export default class DriverCompleteTrip extends React.Component {
                 />
                 <View style={{ backgroundColor: "white", padding: 10, }}>
                     <Text style={styles.title}>
-                        {"BUSCAR EN:\n" + this.state.rideDetails.pickup.add}
+                        {"Se Recogio al usuario en:\n\n" + this.state.rideDetails.pickup.add}
                     </Text>
                     <Divider style={{ margin: 10, }}/>
                     <Text style={styles.title}>
-                        {"DEJAR EN:\n" + this.state.rideDetails.drop.add}
+                        {"Destino:\n\n" + this.state.rideDetails.drop.add}
                     </Text>
 
                     <Divider />
 
-                    <View style={{ width: "100%",  padding: 10, borderRadius: 15, backgroundColor: "#42a5f5",  }} onTouchStart={()=>{
+                    <View style={{ width: "100%",  padding: 10, borderRadius: 15, backgroundColor: "#6633FF",  }} onTouchStart={()=>{
                         const { lat, lng } = this.state.rideDetails.drop;
                         openMaps({
                             lat,
                             lng
                         });
                     }}>
-                        <Text style={{ color: "white", textAlign: "center" }}>Ver En Google Maps (Dejar en)</Text>
+                        <Text style={{ color: "white", textAlign: "center" }}>Seguir Ruta de Destino en Google Maps</Text>
                     </View>
                 </View>
 

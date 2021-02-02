@@ -199,23 +199,23 @@ export default class DriverStartTrip extends React.Component {
 
                 <View style={styles.segment1}>
                     <Text style={styles.title}>
-                        Llevar a:
+                        Destino:
                     </Text>
                     <Text style={styles.textContainer}>{this.state.rideDetails.drop.add}</Text>
 
                     <Text style={styles.title}>
-                        Buscar En:
+                        Recoger al usuario en:
                     </Text>
                     <Text style={styles.textContainer}>{this.state.rideDetails.pickup.add}</Text>
 
-                    <View style={{ width: "100%",  padding: 10, borderRadius: 15, backgroundColor: "#42a5f5",  }} onTouchStart={()=>{
+                    <View style={{ width: "100%",  padding: 10, borderRadius: 15, backgroundColor: "#6633FF",  }} onTouchStart={()=>{
                         const { lat, lng } = this.state.rideDetails.pickup;
                         openMaps({
                             lat,
                             lng
                         });
                     }}>
-                        <Text style={{ color: "white", textAlign: "center" }}>Ver En Google Maps (Buscar en)</Text>
+                        <Text style={{ color: "white", textAlign: "center" }}>Seguir Ruta para Recoger Usuario en Google Maps</Text>
                     </View>
                 </View>
 

@@ -125,14 +125,14 @@ class SearchPlaceModal extends React.Component {
                     reverse
                     name='close'
                     type='evilicon'
-                    color='#517fa4'
+                    color='#6633FF'
                     onPress={() => this.props.closeModal()}
                 />
 
                 <View style={this.styles.searchBar}>
                     <TextInput placeholder={this.props.mode == "driver" ? "Ubicacion de Partida" : "¿Donde irá el Usuario?"} onChangeText={text => this.setState({ textField: text })} />
                 </View>
-                <Button title="Buscar" onPress={() => this.handlePress()} />
+                <Button title="Buscar Ubicación" onPress={() => this.handlePress()} />
 
                 {this.renderContent()}
 
