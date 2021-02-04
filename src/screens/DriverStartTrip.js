@@ -37,7 +37,7 @@ export default class DriverStartTrip extends React.Component {
     }
 
     componentWillMount() {
-        const allDetails = this.props.navigation.getParam('allDetails')
+        const allDetails = this.props.navigation.getParam('allDetails');
         this.setState({
             rideDetails: allDetails,
             region: {
@@ -50,7 +50,7 @@ export default class DriverStartTrip extends React.Component {
         }, () => {
             this.checkStaus()
         })
-        setInterval(this.updateLocation.bind(this), 10000);
+        setInterval(this.updateLocation.bind(this), 15000);
     }
 
     checkStaus() {
@@ -74,21 +74,21 @@ export default class DriverStartTrip extends React.Component {
     updateLocation = async () => {
         if (this.state.status == 'ACCEPTED') {
 
-            let { status } = await Permissions.askAsync(Permissions.LOCATION);
+            const { status } = await Permissions.askAsync(Permissions.LOCATION);
             if (status !== 'granted') {
-                console.log('i am called')
                 this.setState({
                     errorMessage: 'Permission to access location was denied',
                 });
             }
 
-            let location = await Location.getCurrentPositionAsync({});
+            
 
-            var latlng = location.coords.latitude + ',' + location.coords.longitude;
+            const location = await Location.getCurrentPositionAsync({});
+            const latlng = location.coords.latitude + ',' + location.coords.longitude;
+            
             return fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latlng + '&key=' + google_map_key)
                 .then((response) => response.json())
                 .then((responseJson) => {
-                    console.log(location)
                     firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/location').update({
                         lat: location.coords.latitude,
                         lng: location.coords.longitude,
@@ -261,7 +261,6 @@ export default class DriverStartTrip extends React.Component {
                         </View>
                     </View>
 
-                    <View style={styles.newViewStyle} />
 
                     <View style={styles.fixContenStyle}>
                         <Button

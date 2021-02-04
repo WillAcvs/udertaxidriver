@@ -1,8 +1,7 @@
 import React from 'react';
-import { Text, View, StyleSheet, Dimensions, AsyncStorage, FlatList, Modal, TouchableHighlight, StatusBar, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, FlatList, Modal, TouchableHighlight, TouchableWithoutFeedback } from 'react-native';
 import { Button, Header } from 'react-native-elements';
 import Polyline from '@mapbox/polyline';
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { colors } from '../common/theme';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
@@ -57,10 +56,11 @@ export default class DriverTripAccept extends React.Component {
   //checking booking status
   checking() {
     if (this.state.currentBId) {
-      let curUid = firebase.auth().currentUser.uid
+      const curUid = firebase.auth().currentUser.uid
       let bookingId = this.state.currentBId;
+
       const userData = firebase.database().ref('users/' + curUid + '/my_bookings/' + bookingId + '/');
-      userData.on('value', bookingDetails => {
+      userData.once('value', bookingDetails => {
         if (bookingDetails.val()) {
           let curstatus = bookingDetails.val().status;
           this.setState({ status: curstatus })
@@ -78,8 +78,8 @@ export default class DriverTripAccept extends React.Component {
   // find your origin and destination point coordinates and pass it to our method.
   async getDirections(startLoc, destinationLoc) {
     try {
-      let resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${google_map_key}`)
-      let respJson = await resp.json();
+      const resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${google_map_key}`)
+      const respJson = await resp.json();
       let points = Polyline.decode(respJson.routes[0].overview_polyline.points);
       let coords = points.map((point, index) => {
         return {
@@ -87,7 +87,7 @@ export default class DriverTripAccept extends React.Component {
           longitude: point[1]
         }
       })
-      await this.setState({ coords: coords })
+      this.setState({ coords: coords })
       return coords
     }
     catch (error) {
@@ -100,21 +100,23 @@ export default class DriverTripAccept extends React.Component {
   //get current location
   _getLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
+
     if (status !== 'granted') {
       this.setState({
         errorMessage: 'Permission to access location was denied',
       });
     }
-    Location.watchPositionAsync({}, (location) => {
+
+    Location.watchPositionAsync({}, async (location) => {
       if (location) {
-        var pos = {
+        const pos = {
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
         };
         this.setState({ myLocation: pos })
         var curuser = firebase.auth().currentUser.uid;
-        if (pos) {
-          var latlng = pos.latitude + ',' + pos.longitude;
+        
+          const latlng = pos.latitude + ',' + pos.longitude;
           return fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latlng + '&key=' + google_map_key)
             .then((response) => response.json())
             .then((responseJson) => {
@@ -132,7 +134,7 @@ export default class DriverTripAccept extends React.Component {
             .catch((error) => {
               console.error(error);
             });
-        }
+        
       }
 
     });
@@ -168,7 +170,8 @@ export default class DriverTripAccept extends React.Component {
   //get booking details function
   getBookingDetails() {
     let ref = firebase.database().ref('bookings/' + item.bookingId + '/');
-    ref.on('value', (snapshot) => {
+
+    ref.once('value', (snapshot) => {
       this.setState({
         bookingDetails: snapshot.val()
       })
@@ -340,7 +343,7 @@ export default class DriverTripAccept extends React.Component {
 
             return (
               <View style={styles.listItemView}>
-                <View style={styles.mapcontainer}>
+                {/* <View style={styles.mapcontainer}>
                   <MapView style={styles.map}
                     provide
                     r={PROVIDER_GOOGLE}
@@ -371,7 +374,7 @@ export default class DriverTripAccept extends React.Component {
                     />
 
                   </MapView>
-                </View>
+                </View> */}
 
                 <View style={styles.mapDetails}>
                   <View style={styles.dateView}>

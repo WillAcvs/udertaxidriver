@@ -172,7 +172,7 @@ export default class DriverCompleteTrip extends React.Component {
     }
 
     locationAdd(pos) {
-        var latlng = pos.latitude + ',' + pos.longitude;
+        const latlng = pos.latitude + ',' + pos.longitude;
         return fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latlng + '&key=' + google_map_key)
     }
 
@@ -201,6 +201,7 @@ export default class DriverCompleteTrip extends React.Component {
             discount_amount: 0,
 
         }
+        
         this.locationAdd(pos).then((response) => response.json()).then((responseJson) => {
             data.drop = { add: responseJson.results[0].formatted_address, lat: pos.latitude, lng: pos.longitude };
             riderData.drop = { add: responseJson.results[0].formatted_address, lat: pos.latitude, lng: pos.longitude };
