@@ -32,11 +32,12 @@ export default class DriverStartTrip extends React.Component {
             },
             mediaSelectModal: false,
             allData: "",
-            inputCode: ""
+            inputCode: "",
+            customerName: "",
         }
     }
 
-    componentWillMount() {
+    componentDidMount(){
         const allDetails = this.props.navigation.getParam('allDetails');
         this.setState({
             rideDetails: allDetails,
@@ -56,6 +57,13 @@ export default class DriverStartTrip extends React.Component {
     checkStaus() {
         let tripRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/my_bookings/' + this.state.rideDetails.bookingId + '/');
         tripRef.on('value', (snap) => {
+            firebase.database().ref().child("users/" + snap.val().customer).once("value", (change) => {
+                const customerName = (change.val().firstName || "Usuario");
+                this.setState({
+                    customerName,
+                });
+            });
+
             let tripData = snap.val();
             if (tripData) {
                 this.setState({ status: tripData.status })
@@ -65,9 +73,6 @@ export default class DriverStartTrip extends React.Component {
                 }
             }
         })
-
-        // console.log('curuser',firebase.auth().currentUser.uid)
-
     }
 
 
@@ -204,7 +209,7 @@ export default class DriverStartTrip extends React.Component {
                     <Text style={styles.textContainer}>{this.state.rideDetails.drop.add}</Text>
 
                     <Text style={styles.title}>
-                        Recoger al usuario en:
+                        Recoger a {this.state.customerName.toUpperCase()} en:
                     </Text>
                     <Text style={styles.textContainer}>{this.state.rideDetails.pickup.add}</Text>
 
