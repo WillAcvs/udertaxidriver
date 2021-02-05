@@ -23,7 +23,7 @@ export default class MapComponent extends Component {
             >
                 <Marker
                     coordinate={markerCord}
-                    title={'DEJAR'}
+                    title={'DESTINO'}
                     description={'Deja al usuario aquí'}
                     ref={ref => ref?.showCallout()}
                     image={require('../../assets/images/rsz_2red_pin.png')}
