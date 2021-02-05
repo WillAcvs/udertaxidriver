@@ -115,26 +115,26 @@ export default class DriverTripAccept extends React.Component {
         };
         this.setState({ myLocation: pos })
         var curuser = firebase.auth().currentUser.uid;
-        
-          const latlng = pos.latitude + ',' + pos.longitude;
-          return fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latlng + '&key=' + google_map_key)
-            .then((response) => response.json())
-            .then((responseJson) => {
-              if (responseJson.results[0] && responseJson.results[0].formatted_address) {
-                firebase.database().ref('users/' + curuser + '/location').update({
-                  add: responseJson.results[0].formatted_address,
-                  lat: pos.latitude,
-                  lng: pos.longitude
-                })
-              } else {
-                alert(languageJSON.api_error)
-              }
 
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        
+        const latlng = pos.latitude + ',' + pos.longitude;
+        return fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latlng + '&key=' + google_map_key)
+          .then((response) => response.json())
+          .then((responseJson) => {
+            if (responseJson.results[0] && responseJson.results[0].formatted_address) {
+              firebase.database().ref('users/' + curuser + '/location').update({
+                add: responseJson.results[0].formatted_address,
+                lat: pos.latitude,
+                lng: pos.longitude
+              })
+            } else {
+              alert(languageJSON.api_error)
+            }
+
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+
       }
 
     });
@@ -234,6 +234,7 @@ export default class DriverTripAccept extends React.Component {
         tripdate: item.tripdate,
       }
 
+
       let dbRef = firebase.database().ref('users/' + this.state.curUid + '/my_bookings/' + item.bookingId + '/');
       dbRef.update(data).then(() => {
         firebase.database().ref('bookings/' + item.bookingId + '/').update(data).then(() => {
@@ -253,7 +254,6 @@ export default class DriverTripAccept extends React.Component {
         })
 
       }).catch((error) => { console.log(error) })
-
 
       let userDbRef = firebase.database().ref('users/' + item.customer + '/my-booking/' + item.bookingId + '/'); userDbRef.update(riderData);
       let currentUserdbRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/');

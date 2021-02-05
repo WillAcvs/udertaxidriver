@@ -37,8 +37,11 @@ export default class DriverStartTrip extends React.Component {
         }
     }
 
-    componentDidMount(){
+    componentWillMount(){
         const allDetails = this.props.navigation.getParam('allDetails');
+        console.log("QQQQQQQQQQQQQ");
+        console.log(allDetails);
+
         this.setState({
             rideDetails: allDetails,
             region: {
@@ -206,12 +209,12 @@ export default class DriverStartTrip extends React.Component {
                     <Text style={styles.title}>
                         Destino:
                     </Text>
-                    <Text style={styles.textContainer}>{this.state.rideDetails.drop.add}</Text>
+                    <Text style={styles.textContainer}>{this.state?.rideDetails?.drop?.add || "Cargando ..."}</Text>
 
                     <Text style={styles.title}>
                         Recoger a {this.state.customerName.toUpperCase()} en:
                     </Text>
-                    <Text style={styles.textContainer}>{this.state.rideDetails.pickup.add}</Text>
+                    <Text style={styles.textContainer}>{this.state?.rideDetails?.pickup?.add || "Cargando ..."}</Text>
 
                     <View style={{ width: "100%",  padding: 10, borderRadius: 15, backgroundColor: "#6633FF",  }} onTouchStart={()=>{
                         const { lat, lng } = this.state.rideDetails.pickup;
