@@ -11,7 +11,7 @@
         "notification": {
             "icon": "./assets/images/push_notification.png"
         },
-        "version": "4.1.0",
+        "version": "4.2.0",
         "orientation": "portrait",
         "icon": "./assets/images/icon.png",
         "splash": {
@@ -44,7 +44,7 @@
         },
         "android": {
             "package": "com.app.uderdriverapp",
-            "versionCode": 2,
+            "versionCode": 3,
             "permissions": [
                 "CAMERA",
                 "READ_EXTERNAL_STORAGE",
